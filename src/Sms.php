@@ -9,6 +9,7 @@ use Mugonat\Sms\Exceptions\NotConfiguredException;
 use Mugonat\Sms\Exceptions\SmsResponseErrorException;
 use Mugonat\Sms\Services\Bluedot;
 use Mugonat\Sms\Services\File;
+use Mugonat\Sms\Services\Infobip;
 use Psr\Container\ContainerExceptionInterface;
 use function Mugonat\Container\dependency;
 
@@ -95,6 +96,7 @@ abstract class Sms
 
         return match ($name) {
             Bluedot::$alias, Bluedot::class => new Bluedot($config),
+            Infobip::$alias, Infobip::class => new Infobip($config),
             File::$alias, File::class => new File($config),
             default => throw new Exception("Service driver '$name' not found")
         };

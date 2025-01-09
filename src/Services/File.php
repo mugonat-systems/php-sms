@@ -28,11 +28,9 @@ class File implements Service
 
     protected ?string $fileDateFormat;
 
-    public function __construct(array $config)
+    public function __construct(array $config = [])
     {
-        $this->directory = $config['directory'] ?? __DIR__;
-        $this->fileNameFormat = $config['file_name_format'] ?? 'sms_{date}.log';
-        $this->fileDateFormat = $config['file_date_format'] ?? 'Y-m-d';
+        $this->configure($config);
     }
 
     /**
@@ -57,5 +55,14 @@ class File implements Service
     public function zeroConfig(): bool
     {
         return true;
+    }
+
+    public function configure(array $config): static
+    {
+        $this->directory = $config['directory'] ?? __DIR__;
+        $this->fileNameFormat = $config['file_name_format'] ?? 'sms_{date}.log';
+        $this->fileDateFormat = $config['file_date_format'] ?? 'Y-m-d';
+
+        return $this;
     }
 }

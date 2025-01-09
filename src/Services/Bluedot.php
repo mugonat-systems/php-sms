@@ -26,19 +26,9 @@ class Bluedot implements Service
     private string $type;
     private string $encoding;
 
-    public function __construct(array $config)
+    public function __construct(array $config = [])
     {
-        $this->apiId = $config['api_id'] ?? $config['id'] ?? null;
-        $this->apiPassword = $config['api_password'] ?? $config['password'] ?? null;
-        $this->senderId = $config['sender_id'] ?? null;
-
-        $this->isConfigured(
-            $this->apiId && $this->apiPassword && $this->senderId
-        );
-
-        $this->api = $config['api'] ?? 'https://rest.bluedotsms.com/api/SendSMS';
-        $this->type = $config['type'] ?? 'T';
-        $this->encoding = $config['encoding'] ?? 'T';
+        $this->configure($config);
     }
 
     /**
@@ -77,5 +67,22 @@ class Bluedot implements Service
         }
 
         return new Response(true, $obj);
+    }
+
+    public function configure(array $config): static
+    {
+        $this->apiId = $config['api_id'] ?? $config['id'] ?? null;
+        $this->apiPassword = $config['api_password'] ?? $config['password'] ?? null;
+        $this->senderId = $config['sender_id'] ?? null;
+
+        $this->isConfigured(
+            $this->apiId && $this->apiPassword && $this->senderId
+        );
+
+        $this->api = $config['api'] ?? 'https://rest.bluedotsms.com/api/SendSMS';
+        $this->type = $config['type'] ?? 'T';
+        $this->encoding = $config['encoding'] ?? 'T';
+
+        return $this;
     }
 }

@@ -13,5 +13,7 @@ interface Service
 {
     public function send(string $phone, string $message): Response;
 
+    public function configure(array $config): static;
+
     public function isConfigured(): bool;
 }
