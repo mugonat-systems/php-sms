@@ -1,0 +1,34 @@
+{
+  "name": "mugonat/sms",
+  "description": "This is a package with different sms drivers",
+  "type": "library",
+  "version": "dev-0.0.1",
+  "license": "proprietary",
+  "authors": [
+    {
+      "name": "joech",
+      "email": "email@example.com"
+    }
+  ],
+  "require": {
+    "guzzlehttp/guzzle": "^7.9",
+    "mugonat/service-container": "dev-main"
+  },
+  "autoload": {
+    "psr-4": {
+      "Mugonat\\Sms\\": "src/",
+      "Mugonat\\Sms\\Example\\": "example/"
+    },
+    "files": [
+      "src/helpers.php"
+    ]
+  },
+  "minimum-stability": "dev",
+  "prefer-stable": true,
+  "repositories": [
+    {
+      "type": "vcs",
+      "url": "https://github.com/mugonat-systems/php-service-container"
+    }
+  ]
+}
