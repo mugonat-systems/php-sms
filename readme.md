@@ -1,15 +1,9 @@
-# Basic Service Container
+# Basic Sms Service
 
-### Resolve dependencies like a pro
+### Send SMSes with breeze
 
 ```php
-// Old way, DON'T DO THIS
-$instance = new User(new Mail(new MailSender()));
-$instance->sendMail("alex (Using old instantiation)");
-
-// New way, cool way
-$instance = dependency(User::class);
-$instance->sendMail("alex (Using dependency helper)");
+\Mugonat\Sms\sms('+263XXX', 'Message is awesome');
 ```
 
 You can find the full example [here](./example/index.php)
@@ -25,7 +19,7 @@ Inside `composer.json` add this:
   "repositories": [
     {
       "type": "vcs",
-      "url": "https://github.com/mugonat-systems/php-service-container"
+      "url": "https://github.com/mugonat-systems/php-sms"
     }
   ]
 }
@@ -33,5 +27,5 @@ Inside `composer.json` add this:
 
 Then run 
 ```bash
-composer require mugonat/service-container
+composer require mugonat/sms
 ```
