@@ -11,14 +11,17 @@ use function Mugonat\Sms\sms;
 
 require __DIR__ . '/../vendor/autoload.php';
 
-// Optional Configure
-//Sms::configure(File::class, [
-//    'directory' => __DIR__ . '/sms',
-//    'file_name_format' => 'sms-{date}.log',
-//    'file_date_format' => 'Y-m-d',
-//]);
+// use directly
+fileSms('+212600000000', 'Hello World, from file service');
 
-// Use
-$success = fileSms('+212600000000', 'Hello World, from file service');
+// or optionally Configure
+Sms::configure(File::class, [
+    'directory' => __DIR__ . '/sms',
+    'file_name_format' => 'sms-{date}.log',
+    'file_date_format' => 'Y-m-d',
+]);
+
+// and use
+$success = sms('+212600000000', 'Hello World, from file service');
 
 echo "Send sms response: $success";

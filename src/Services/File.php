@@ -6,6 +6,7 @@ use GuzzleHttp\Client;
 use GuzzleHttp\Exception\GuzzleException;
 use Mugonat\Sms\Response;
 use Mugonat\Sms\Service;
+use Mugonat\Sms\Traits\HasConfig;
 
 /**
  * Class File
@@ -18,6 +19,8 @@ use Mugonat\Sms\Service;
  */
 class File implements Service
 {
+    use HasConfig;
+
     public static string $alias = 'file';
 
     protected ?string $directory;
@@ -49,5 +52,10 @@ class File implements Service
         file_put_contents($fileName, date('H:i:s') . ": $phone - $message" . PHP_EOL, FILE_APPEND);
 
         return new Response(true, $fileName);
+    }
+
+    public function zeroConfig(): bool
+    {
+        return true;
     }
 }

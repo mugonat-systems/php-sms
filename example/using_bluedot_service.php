@@ -9,23 +9,13 @@ use function Mugonat\Sms\sms;
 require __DIR__ . '/../vendor/autoload.php';
 
 // Configuration
-Sms::configure(Bluedot::class, [
-    'id' => '<bluedot_api_id>',
-    'password' => '<bluedot_api_password>',
-    'sender_id' => '<bluedot_sender_id>',
-]);
+//Sms::configure(Bluedot::class, [
+//    'id' => '<bluedot_api_id>',
+//    'password' => '<bluedot_api_password>',
+//    'sender_id' => '<bluedot_sender_id>',
+//]);
 
-// Direct service specification
-Sms::send('+212600000000', 'Hello World', 'bluedot');
-Sms::send('+212600000000', 'Hello World', Bluedot::class);
-Sms::send('+212600000000', 'Hello World', Bluedot::$alias);
+// Use
+$success = bluedotSms('+212600000000', 'Hello World');
 
-// Using a constant default
-Sms::setDefault(Bluedot::class);
-Sms::send('+212600000000', 'Hello World');
-sms('+212600000000', 'Hello World');
-
-// Direct service helper
-serviceSms(Bluedot::class, '+212600000000', 'Hello World');
-// Each available service has a dedicated helper
-bluedotSms('+212600000000', 'Hello World');
+echo "Send sms response: $success";

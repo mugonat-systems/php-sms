@@ -1,24 +1,25 @@
 <?php
 
-namespace Mugonat\Sms;
-
-use GuzzleHttp\Client;
-use GuzzleHttp\Exception\GuzzleException;
-use Mugonat\Sms\Response;
-use Mugonat\Sms\Service;
+namespace Mugonat\Sms\Traits;
 
 /**
- * Represents the Bluedot service for sending SMS messages via the Bluedot API.
- * Implements the Service interface.
+ * A trait that provides configuration checking functionality.
  */
 trait HasConfig
 {
     protected bool $configured = false;
 
-    public function isConfigured(): bool
+    public function isConfigured(?bool $value = null): bool
     {
+        if($value !== null){
+            $this->configured = $value;
+        }
+
         return $this->configured || $this->zeroConfig();
     }
 
-    public abstract function zeroConfig(): bool;
+    public function zeroConfig(): bool
+    {
+        return false;
+    }
 }

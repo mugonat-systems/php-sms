@@ -12,4 +12,6 @@ use ReflectionException;
 interface Service
 {
     public function send(string $phone, string $message): Response;
+
+    public function isConfigured(): bool;
 }

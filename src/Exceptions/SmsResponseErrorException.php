@@ -4,7 +4,7 @@ namespace Mugonat\Sms\Exceptions;
 
 use Exception;
 
-class NotConfiguredException extends Exception
+class SmsResponseErrorException extends Exception
 {
 
 }

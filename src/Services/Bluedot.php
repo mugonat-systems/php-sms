@@ -6,6 +6,7 @@ use GuzzleHttp\Client;
 use GuzzleHttp\Exception\GuzzleException;
 use Mugonat\Sms\Response;
 use Mugonat\Sms\Service;
+use Mugonat\Sms\Traits\HasConfig;
 
 /**
  * Represents the Bluedot service for sending SMS messages via the Bluedot API.
@@ -13,6 +14,8 @@ use Mugonat\Sms\Service;
  */
 class Bluedot implements Service
 {
+    use HasConfig;
+
     public static string $alias = 'bluedot';
 
     protected ?string $apiPassword;
@@ -27,7 +30,11 @@ class Bluedot implements Service
     {
         $this->apiId = $config['api_id'] ?? $config['id'] ?? null;
         $this->apiPassword = $config['api_password'] ?? $config['password'] ?? null;
-        $this->senderId = $config['sender_id'];
+        $this->senderId = $config['sender_id'] ?? null;
+
+        $this->isConfigured(
+            $this->apiId && $this->apiPassword && $this->senderId
+        );
 
         $this->api = $config['api'] ?? 'https://rest.bluedotsms.com/api/SendSMS';
         $this->type = $config['type'] ?? 'T';

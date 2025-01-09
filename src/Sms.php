@@ -5,6 +5,8 @@ namespace Mugonat\Sms;
 use Exception;
 use GuzzleHttp\Exception\GuzzleException;
 use Mugonat\Container\Container;
+use Mugonat\Sms\Exceptions\NotConfiguredException;
+use Mugonat\Sms\Exceptions\SmsResponseErrorException;
 use Mugonat\Sms\Services\Bluedot;
 use Mugonat\Sms\Services\File;
 use Psr\Container\ContainerExceptionInterface;
@@ -43,10 +45,15 @@ abstract class Sms
     {
         $service ??= Sms::$default;
         $driver = Sms::driver($service);
+
+        if (!$driver->isConfigured()) {
+            throw new NotConfiguredException("Service driver '$service' not configured, please call Sms::configure($service, [config]) first");
+        }
+
         $response = $driver->send($phone, $message);
 
         if ($response->hasError() && $throw) {
-            throw new Exception($response->error);
+            throw new SmsResponseErrorException($response->error);
         }
 
         return $response->isSuccessful;
@@ -66,6 +73,8 @@ abstract class Sms
         Container::instance()->set($service, function () use ($config, $service) {
             return Sms::driver($service, $config);
         });
+
+        Sms::setDefault($service);
     }
 
     /**
