@@ -7,9 +7,12 @@ use GuzzleHttp\Exception\GuzzleException;
 use Mugonat\Container\Container;
 use Mugonat\Sms\Exceptions\NotConfiguredException;
 use Mugonat\Sms\Exceptions\SmsResponseErrorException;
+use Mugonat\Sms\Services\Aptus;
 use Mugonat\Sms\Services\Bluedot;
 use Mugonat\Sms\Services\File;
 use Mugonat\Sms\Services\Infobip;
+use Mugonat\Sms\Services\MessageBird;
+use Mugonat\Sms\Services\Twilio;
 use Psr\Container\ContainerExceptionInterface;
 use function Mugonat\Container\dependency;
 
@@ -97,6 +100,9 @@ abstract class Sms
         return match ($name) {
             Bluedot::$alias, Bluedot::class => new Bluedot($config),
             Infobip::$alias, Infobip::class => new Infobip($config),
+            Aptus::$alias, Aptus::class => new Aptus($config),
+            MessageBird::$alias, MessageBird::class => new MessageBird($config),
+            Twilio::$alias, Twilio::class => new Twilio($config),
             File::$alias, File::class => new File($config),
             default => throw new Exception("Service driver '$name' not found")
         };
