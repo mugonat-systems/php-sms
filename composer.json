@@ -2,7 +2,6 @@
   "name": "mugonat/sms",
   "description": "This is a package with different sms drivers",
   "type": "library",
-  "version": "dev-0.0.1",
   "license": "proprietary",
   "authors": [
     {
@@ -26,12 +25,6 @@
   },
   "minimum-stability": "dev",
   "prefer-stable": true,
-  "repositories": [
-    {
-      "type": "vcs",
-      "url": "https://github.com/mugonat-systems/php-service-container"
-    }
-  ],
   "require-dev": {
     "phpunit/phpunit": "^11.5"
   }
