@@ -1,7 +1,7 @@
 {
   "name": "mugonat/sms",
   "description": "This is a package with different sms drivers",
-  "type": "library",
+  "version": "1.0.1",
   "license": "proprietary",
   "authors": [
     {
@@ -11,7 +11,7 @@
   ],
   "require": {
     "guzzlehttp/guzzle": "^7.9",
-    "mugonat/service-container": "dev-main"
+    "mugonat/service-container": "^1.0"
   },
   "autoload": {
     "psr-4": {
