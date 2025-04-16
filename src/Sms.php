@@ -9,6 +9,7 @@ use Mugonat\Sms\Exceptions\NotConfiguredException;
 use Mugonat\Sms\Exceptions\SmsResponseErrorException;
 use Mugonat\Sms\Services\Aptus;
 use Mugonat\Sms\Services\Bluedot;
+use Mugonat\Sms\Services\Email;
 use Mugonat\Sms\Services\File;
 use Mugonat\Sms\Services\Infobip;
 use Mugonat\Sms\Services\MessageBird;
@@ -21,7 +22,7 @@ use function Mugonat\Container\dependency;
  */
 abstract class Sms
 {
-    private static string $default = Bluedot::class;
+    public static string $default = Bluedot::class;
 
     /**
      * Sets the default service for message sending.
@@ -104,6 +105,7 @@ abstract class Sms
             MessageBird::$alias, MessageBird::class => new MessageBird($config),
             Twilio::$alias, Twilio::class => new Twilio($config),
             File::$alias, File::class => new File($config),
+            Email::$alias, Email::class => new Email($config),
             default => throw new Exception("Service driver '$name' not found")
         };
     }

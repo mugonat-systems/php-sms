@@ -4,9 +4,10 @@ namespace Mugonat\Sms;
 
 use GuzzleHttp\Exception\GuzzleException;
 use Mugonat\Container\Container;
+use Mugonat\Container\Interfaces\ContainerExceptionInterface;
 use Mugonat\Sms\Services\Bluedot;
+use Mugonat\Sms\Services\Email;
 use Mugonat\Sms\Services\File;
-use Psr\Container\ContainerExceptionInterface;
 use function Mugonat\Container\dependency_exists;
 
 if (!function_exists('sms')) {
@@ -63,6 +64,27 @@ if (!function_exists('bluedotSms')) {
         }
 
         return Sms::send($phone, $message, Bluedot::class, false);
+    }
+}
+
+if (!function_exists('emailSms')) {
+    /**
+     * Sends an SMS message using the Bluedot service.
+     *
+     * @param string $email The recipient's email address.
+     * @param string $message The message content to be sent.
+     *
+     * @return bool Returns true if the message was sent successfully, otherwise false.
+     * @throws ContainerExceptionInterface
+     * @throws GuzzleException
+     */
+    function emailSms(string $email, string $message): bool
+    {
+        if (!Container::instance()->exists(Email::class)) {
+            Sms::configure(Email::class, []);
+        }
+
+        return Sms::send($email, $message, Email::class, false);
     }
 }
 
