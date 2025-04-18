@@ -2,18 +2,29 @@
 
 namespace Mugonat\Sms;
 
-use Psr\Container\ContainerExceptionInterface;
-use Psr\Container\ContainerInterface;
-use Mugonat\Container\Exceptions\NotFoundException;
-use Psr\Container\NotFoundExceptionInterface;
-use ReflectionClass;
-use ReflectionException;
+use GuzzleHttp\Exception\GuzzleException;
+use Mugonat\Container\Interfaces\ContainerExceptionInterface;
 
-interface Service
+abstract class Service
 {
-    public function send(string $phone, string $message): Response;
+    public function __construct(array $config = [])
+    {
+        $this->configure($config);
+    }
 
-    public function configure(array $config): static;
+    public abstract function send(string $phone, string $message): Response;
 
-    public function isConfigured(): bool;
+    public abstract function configure(array $config): static;
+
+    public abstract function isConfigured(): bool;
+
+    /**
+     * @throws ContainerExceptionInterface
+     * @throws \Throwable
+     * @throws GuzzleException
+     */
+    public static function to($phone, string $message): bool
+    {
+       return Sms::send($phone, $message, static::class, true);
+    }
 }

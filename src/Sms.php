@@ -5,6 +5,7 @@ namespace Mugonat\Sms;
 use Exception;
 use GuzzleHttp\Exception\GuzzleException;
 use Mugonat\Container\Container;
+use Mugonat\Container\Interfaces\ContainerExceptionInterface;
 use Mugonat\Sms\Exceptions\NotConfiguredException;
 use Mugonat\Sms\Exceptions\SmsResponseErrorException;
 use Mugonat\Sms\Services\Aptus;
@@ -14,7 +15,7 @@ use Mugonat\Sms\Services\File;
 use Mugonat\Sms\Services\Infobip;
 use Mugonat\Sms\Services\MessageBird;
 use Mugonat\Sms\Services\Twilio;
-use Psr\Container\ContainerExceptionInterface;
+use Throwable;
 use function Mugonat\Container\dependency;
 
 /**
@@ -44,7 +45,7 @@ abstract class Sms
      * @param bool $throw Determines whether to throw an exception on error. Defaults to true.
      * @return bool Indicates whether the message was sent successfully.
      * @throws Exception If an error occurs during sending and $throw is set to true.
-     * @throws ContainerExceptionInterface|GuzzleException
+     * @throws ContainerExceptionInterface|GuzzleException|Throwable
      */
     public static function send(string $phone, string $message, ?string $service = null, bool $throw = true): bool
     {
@@ -89,8 +90,7 @@ abstract class Sms
      * @param string|class-string<TService> $name The name of the service driver to retrieve.
      * @param array|null $config An optional configuration array for the service driver. Defaults to an empty array.
      * @return TService|Service The service driver instance.
-     * @throws ContainerExceptionInterface
-     * @throws Exception
+     * @throws Throwable|ContainerExceptionInterface
      */
     public static function driver(string $name, ?array $config = null)
     {

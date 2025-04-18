@@ -18,7 +18,6 @@ if (!function_exists('sms')) {
      * @param string $message The message content to be sent.
      *
      * @return bool Returns true if the message was sent successfully, otherwise false.
-     * @throws ContainerExceptionInterface
      * @throws GuzzleException
      */
     function sms(string $phone, string $message): bool
@@ -36,7 +35,6 @@ if (!function_exists('serviceSms')) {
      * @param string $message The message content to be sent.
      *
      * @return bool Returns true if the message was sent successfully, otherwise false.
-     * @throws ContainerExceptionInterface
      * @throws GuzzleException
      */
     function serviceSms(string $service, string $phone, string $message): bool
@@ -54,7 +52,6 @@ if (!function_exists('bluedotSms')) {
      * @param string $message The message content to be sent.
      *
      * @return bool Returns true if the message was sent successfully, otherwise false.
-     * @throws ContainerExceptionInterface
      * @throws GuzzleException
      */
     function bluedotSms(string $phone, string $message): bool
@@ -75,7 +72,6 @@ if (!function_exists('emailSms')) {
      * @param string $message The message content to be sent.
      *
      * @return bool Returns true if the message was sent successfully, otherwise false.
-     * @throws ContainerExceptionInterface
      * @throws GuzzleException
      */
     function emailSms(string $email, string $message): bool
@@ -97,7 +93,6 @@ if (!function_exists('fileSms')) {
      * @param string $message The message content to be sent.
      *
      * @return bool Returns true if the message was sent successfully, otherwise false.
-     * @throws ContainerExceptionInterface
      * @throws GuzzleException
      */
     function fileSms(string $phone, string $message): bool

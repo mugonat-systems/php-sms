@@ -17,7 +17,7 @@ use Mugonat\Sms\Traits\HasConfig;
  * Contains behavior for directory management, filename formatting, and date-based
  * logs for SMS messages.
  */
-class File implements Service
+class File extends Service
 {
     use HasConfig;
 
@@ -28,14 +28,6 @@ class File implements Service
 
     protected ?string $fileDateFormat;
 
-    public function __construct(array $config = [])
-    {
-        $this->configure($config);
-    }
-
-    /**
-     * @throws GuzzleException
-     */
     public function send(string $phone, string $message): Response
     {
         if (dir($this->directory) === false) {

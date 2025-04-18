@@ -12,7 +12,7 @@ use Mugonat\Sms\Traits\HasConfig;
  * Represents the Twilio service for sending SMS messages via the Twilio API.
  * Implements the Service interface.
  */
-class Twilio implements Service
+class Twilio extends Service
 {
     use HasConfig;
 
@@ -21,11 +21,6 @@ class Twilio implements Service
     protected ?string $accountSid;
     protected ?string $authToken;
     protected ?string $fromNumber;
-
-    public function __construct(array $config = [])
-    {
-        $this->configure($config);
-    }
 
     /**
      * @throws GuzzleException

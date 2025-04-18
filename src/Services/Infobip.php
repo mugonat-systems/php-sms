@@ -11,7 +11,7 @@ use Mugonat\Sms\Traits\HasConfig;
 /**
  *
  */
-class Infobip implements Service
+class Infobip extends Service
 {
     use HasConfig;
 
@@ -21,11 +21,6 @@ class Infobip implements Service
     protected ?string $endpoint;
     protected ?string $apiKey;
     protected ?string $senderName;
-
-    public function __construct(array $config = [])
-    {
-        $this->configure($config);
-    }
 
     /**
      * @throws GuzzleException

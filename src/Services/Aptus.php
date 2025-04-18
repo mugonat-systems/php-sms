@@ -12,7 +12,7 @@ use Mugonat\Sms\Traits\HasConfig;
  * Represents the Aptus service for sending SMS messages via the Aptus API.
  * Implements the Service interface.
  */
-class Aptus implements Service
+class Aptus extends Service
 {
     use HasConfig;
 
@@ -21,11 +21,6 @@ class Aptus implements Service
     protected ?string $username;
     protected ?string $password;
     protected ?string $senderId;
-
-    public function __construct(array $config = [])
-    {
-        $this->configure($config);
-    }
 
     public function send(string $phone, string $message): Response
     {

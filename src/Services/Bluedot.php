@@ -12,7 +12,7 @@ use Mugonat\Sms\Traits\HasConfig;
  * Represents the Bluedot service for sending SMS messages via the Bluedot API.
  * Implements the Service interface.
  */
-class Bluedot implements Service
+class Bluedot extends Service
 {
     use HasConfig;
 
@@ -25,11 +25,6 @@ class Bluedot implements Service
     protected ?string $api;
     private string $type;
     private string $encoding;
-
-    public function __construct(array $config = [])
-    {
-        $this->configure($config);
-    }
 
     /**
      * @throws GuzzleException

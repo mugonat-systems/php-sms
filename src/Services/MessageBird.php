@@ -8,7 +8,7 @@ use Mugonat\Sms\Response;
 use Mugonat\Sms\Service;
 use Mugonat\Sms\Traits\HasConfig;
 
-class MessageBird implements Service
+class MessageBird extends Service
 {
     use HasConfig;
 
@@ -16,11 +16,6 @@ class MessageBird implements Service
 
     protected ?string $accessKey;
     protected ?string $fromNumber;
-
-    public function __construct(array $config = [])
-    {
-        $this->configure($config);
-    }
 
     /**
      * @throws GuzzleException
