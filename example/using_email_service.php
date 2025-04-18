@@ -8,22 +8,11 @@ use function Mugonat\Sms\sms;
 
 require __DIR__ . '/../vendor/autoload.php';
 
-/*
-MAIL_MAILER=smtp
-MAIL_HOST=smtp.gmail.com
-MAIL_PORT=587
-MAIL_USERNAME=chatbot.mugonat@gmail.com
-MAIL_PASSWORD=tpzwcfxhzwjbusmb
-MAIL_ENCRYPTION=tls
-MAIL_FROM_ADDRESS=no-reply@pennypal.com
-MAIL_FROM_NAME="${APP_NAME}"
- */
-
 // Configuration
 Sms::configure(\Mugonat\Sms\Services\Email::class, [
     'host' => 'smtp.gmail.com',
-    'username' => 'chatbot.mugonat@gmail.com',
-    'password'  => 'tpzwcfxhzwjbusmb',
+    'username' => '',
+    'password'  => '',
     'encryption' => 'tls',
     'port' => 587,
 ]);
