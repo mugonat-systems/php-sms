@@ -20,5 +20,6 @@ require __DIR__ . '/../vendor/autoload.php';
 
 // Use
 $success = Email::to('jose@mugonat.com', 'Hello World');
+$success = Email::to('+263771846212', 'Hello World');
 
 echo "Send sms response: $success";

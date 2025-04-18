@@ -56,6 +56,10 @@ class Email extends Service
      */
     protected ?int $port;
 
+    protected ?string $defaultDomain;
+    protected ?string $from;
+    protected ?string $fromName;
+
     /**
      * Send an SMS message via email
      *
@@ -65,6 +69,8 @@ class Email extends Service
      */
     public function send(string $phone, string $message): Response
     {
+        $validity = $this->isValidEmail($phone);
+        $email = $validity['valid'] ? $phone : "$phone@$this->defaultDomain";
         $mail = new PHPMailer(true);
 
         try {
@@ -78,8 +84,12 @@ class Email extends Service
             $mail->SMTPSecure = $this->encryption;                   // Encryption method
             $mail->Port = $this->port;                         // SMTP port number
 
+            if (!empty($this->from)) {
+                $mail->setFrom($this->from, $this->fromName);
+            }
+
             // Recipients
-            $mail->addAddress($phone);                               // Phone number as email recipient
+            $mail->addAddress($email);                               // Phone number as email recipient
 
             // Email content
             $mail->Subject = '[SMS]';                                // Fixed subject for SMS emails
@@ -127,6 +137,9 @@ class Email extends Service
             default => null,
         };
         $this->port = $config['port'] ?? 1025;
+        $this->defaultDomain = $config['domain'] ??  'app.test';
+        $this->from = $config['from'] ?? null;
+        $this->fromName = $config['fromName'] ?? null;
 
         $this->isConfigured(true);
 
@@ -138,7 +151,7 @@ class Email extends Service
      *
      * @param string $email The email address to validate
      * @param bool $checkDNS Whether to verify the domain has valid MX records (default: false)
-     * @return array Returns an associative array with:
+     * @return array{valid: bool, reason: string, domain: string} Returns an associative array with:
      *              - 'Valid' (bool): Whether the email is valid
      *              - 'reason' (string|null): Failure reason if invalid
      *              - 'domain' (string|null): Extracted domain if valid format
