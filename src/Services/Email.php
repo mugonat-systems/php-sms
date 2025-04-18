@@ -59,6 +59,7 @@ class Email extends Service
     protected ?string $defaultDomain;
     protected ?string $from;
     protected ?string $fromName;
+    protected ?string $subject;
 
     /**
      * Send an SMS message via email
@@ -92,7 +93,7 @@ class Email extends Service
             $mail->addAddress($email);                               // Phone number as email recipient
 
             // Email content
-            $mail->Subject = '[SMS]';                                // Fixed subject for SMS emails
+            $mail->Subject = $this->subject ?? "SMS for $phone";                                // Fixed subject for SMS emails
             $mail->Body = $message;                              // The actual SMS message
 
             $mail->send();
@@ -140,6 +141,7 @@ class Email extends Service
         $this->defaultDomain = $config['domain'] ??  'app.test';
         $this->from = $config['from'] ?? null;
         $this->fromName = $config['fromName'] ?? null;
+        $this->subject = $config['subject'] ?? null;
 
         $this->isConfigured(true);
 
