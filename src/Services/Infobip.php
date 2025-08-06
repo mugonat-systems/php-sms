@@ -38,17 +38,19 @@ class Infobip extends Service
             ]]);
 
             $response = $client->post($url, [
-                'messages' => [
-                    [
-                        'from' => $this->senderName,
-                        'destinations' => [
-                            [
-                                'to' => $phone,
+                'body' => json_encode([
+                    'messages' => [
+                        [
+                            'from' => $this->senderName,
+                            'destinations' => [
+                                [
+                                    'to' => $phone,
+                                ],
                             ],
+                            'text' => $message,
                         ],
-                        'text' => $message,
                     ],
-                ],
+                ])
             ]);
 
             return new Response($response->getStatusCode() == 200, $response->getBody());
