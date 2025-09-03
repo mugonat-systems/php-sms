@@ -14,6 +14,7 @@ use Mugonat\Sms\Services\Email;
 use Mugonat\Sms\Services\File;
 use Mugonat\Sms\Services\Infobip;
 use Mugonat\Sms\Services\MessageBird;
+use Mugonat\Sms\Services\Teleoss;
 use Mugonat\Sms\Services\Twilio;
 use Throwable;
 use function Mugonat\Container\dependency;
@@ -106,6 +107,7 @@ abstract class Sms
             Twilio::$alias, Twilio::class => new Twilio($config),
             File::$alias, File::class => new File($config),
             Email::$alias, Email::class => new Email($config),
+            Teleoss::$alias, Teleoss::class => new Teleoss($config),
             default => throw new Exception("Service driver '$name' not found")
         };
     }

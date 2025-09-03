@@ -60,18 +60,20 @@ class Email extends Service
     protected ?string $from;
     protected ?string $fromName;
     protected ?string $subject;
+    protected ?string $defaultDestination;
 
     /**
      * Send an SMS message via email
      *
-     * @param string $phone The phone number to send to (will be used as email address)
-     * @param string $message The SMS message content
+     * @param string $phone
+     * @param string $message
+     * @param callable|null $modifyClientUsing
      * @return Response Returns a response object indicating success/failure
      */
-    public function send(string $phone, string $message): Response
+    public function send(string $phone, string $message, ?callable $modifyClientUsing = null): Response
     {
         $validity = $this->isValidEmail($phone);
-        $email = $validity['valid'] ? $phone : "$phone@$this->defaultDomain";
+        $email = $this->defaultDestination ?? ($validity['valid'] ? $phone : "$phone@$this->defaultDomain");
         $mail = new PHPMailer(true);
 
         try {
@@ -142,6 +144,7 @@ class Email extends Service
         $this->from = $config['from'] ?? null;
         $this->fromName = $config['fromName'] ?? null;
         $this->subject = $config['subject'] ?? null;
+        $this->defaultDestination = $config['defaultDestination'] ?? null;
 
         $this->isConfigured(true);
 

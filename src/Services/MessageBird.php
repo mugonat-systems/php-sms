@@ -4,6 +4,7 @@ namespace Mugonat\Sms\Services;
 
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\GuzzleException;
+use JsonException;
 use Mugonat\Sms\Response;
 use Mugonat\Sms\Service;
 use Mugonat\Sms\Traits\HasConfig;
@@ -18,9 +19,12 @@ class MessageBird extends Service
     protected ?string $fromNumber;
 
     /**
-     * @throws GuzzleException
+     * @param string $phone
+     * @param string $message
+     * @param callable|null $modifyClientUsing
+     * @return Response
      */
-    public function send(string $phone, string $message): Response
+    public function send(string $phone, string $message, ?callable $modifyClientUsing = null): Response
     {
         $client = new Client([
             'base_uri' => 'https://rest.messagebird.com/messages',
@@ -28,6 +32,10 @@ class MessageBird extends Service
                 'Authorization' => 'AccessKey ' . $this->accessKey,
             ],
         ]);
+
+        if (is_callable($modifyClientUsing)) {
+            $modifyClientUsing($client);
+        }
 
         try {
             $response = $client->post('', [
@@ -38,14 +46,14 @@ class MessageBird extends Service
                 ],
             ]);
 
-            $responseBody = json_decode($response->getBody()->getContents(), true);
+            $responseBody = json_decode($response->getBody()->getContents(), true, 512, JSON_THROW_ON_ERROR);
 
             $success = !empty($responseBody['id']);
             $data = $responseBody;
 
             return new Response($success, $data);
 
-        } catch (GuzzleException $e) {
+        } catch (GuzzleException|JsonException $e) {
             return new Response(false, [], $e->getMessage());
         }
     }

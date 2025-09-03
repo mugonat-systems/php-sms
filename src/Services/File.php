@@ -7,6 +7,7 @@ use GuzzleHttp\Exception\GuzzleException;
 use Mugonat\Sms\Response;
 use Mugonat\Sms\Service;
 use Mugonat\Sms\Traits\HasConfig;
+use RuntimeException;
 
 /**
  * Class File
@@ -28,13 +29,13 @@ class File extends Service
 
     protected ?string $fileDateFormat;
 
-    public function send(string $phone, string $message): Response
+    public function send(string $phone, string $message, ?callable $modifyClientUsing = null): Response
     {
-        if (dir($this->directory) === false) {
-            mkdir($this->directory);
+        if ((dir($this->directory) === false) && !mkdir($concurrentDirectory = $this->directory) && !is_dir($concurrentDirectory)) {
+            throw new RuntimeException(sprintf('Directory "%s" was not created', $concurrentDirectory));
         }
 
-        $fileName = join(DIRECTORY_SEPARATOR, [
+        $fileName = implode(DIRECTORY_SEPARATOR, [
             $this->directory,
             str_replace('{date}', date($this->fileDateFormat), $this->fileNameFormat)
         ]);
@@ -52,7 +53,7 @@ class File extends Service
     public function configure(array $config): static
     {
         $this->directory = $config['directory'] ?? __DIR__;
-        $this->fileNameFormat = $config['file_name_format'] ?? 'sms_{date}.log';
+        $this->fileNameFormat = $config['file_name_format'] ?? 'sms-{date}.log';
         $this->fileDateFormat = $config['file_date_format'] ?? 'Y-m-d';
 
         return $this;

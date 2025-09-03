@@ -12,11 +12,11 @@ abstract class Service
         $this->configure($config);
     }
 
-    public abstract function send(string $phone, string $message): Response;
+    abstract public function send(string $phone, string $message, ?callable $modifyClientUsing = null): Response;
 
-    public abstract function configure(array $config): static;
+    abstract public function configure(array $config): static;
 
-    public abstract function isConfigured(): bool;
+    abstract public function isConfigured(): bool;
 
     /**
      * @throws ContainerExceptionInterface

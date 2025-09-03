@@ -23,9 +23,13 @@ class Infobip extends Service
     protected ?string $senderName;
 
     /**
+     * @param string $phone
+     * @param string $message
+     * @param callable|null $modifyClientUsing
+     * @return Response
      * @throws GuzzleException
      */
-    public function send(string $phone, string $message): Response
+    public function send(string $phone, string $message, ?callable $modifyClientUsing = null): Response
     {
         $phone = str_replace('+', '', $phone);
         $url = $this->host.$this->endpoint;
@@ -37,21 +41,27 @@ class Infobip extends Service
                 'Accept' => 'application/json',
             ]]);
 
+            if (is_callable($modifyClientUsing)) {
+                $modifyClientUsing($client);
+            }
+
             $response = $client->post($url, [
-                'messages' => [
-                    [
-                        'from' => $this->senderName,
-                        'destinations' => [
-                            [
-                                'to' => $phone,
+                'body' => json_encode([
+                    'messages' => [
+                        [
+                            'from' => $this->senderName,
+                            'destinations' => [
+                                [
+                                    'to' => $phone,
+                                ],
                             ],
+                            'text' => $message,
                         ],
-                        'text' => $message,
                     ],
-                ],
+                ], JSON_THROW_ON_ERROR)
             ]);
 
-            return new Response($response->getStatusCode() == 200, $response->getBody());
+            return new Response($response->getStatusCode() === 200, $response->getBody());
 
         } catch (\Exception $e) {
             return new Response(false, null, error: $e->getMessage());

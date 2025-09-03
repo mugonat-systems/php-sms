@@ -4,6 +4,7 @@ namespace Mugonat\Sms\Services;
 
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\GuzzleException;
+use JsonException;
 use Mugonat\Sms\Response;
 use Mugonat\Sms\Service;
 use Mugonat\Sms\Traits\HasConfig;
@@ -27,9 +28,14 @@ class Bluedot extends Service
     private string $encoding;
 
     /**
+     * @param string $phone
+     * @param string $message
+     * @param callable|null $modifyClientUsing
+     * @return Response
      * @throws GuzzleException
+     * @throws JsonException
      */
-    public function send(string $phone, string $message): Response
+    public function send(string $phone, string $message, ?callable $modifyClientUsing = null): Response
     {
         $phone = str_replace('+', '', $phone);
         $data = json_encode([
@@ -40,16 +46,20 @@ class Bluedot extends Service
             'encoding' => $this->encoding,
             'phonenumber' => $phone,
             'textmessage' => $message,
-        ]);
+        ], JSON_THROW_ON_ERROR);
 
         $client = new Client(['headers' => [
             'Accept' => 'application/json',
             'Content-Type' => 'application/json',
         ]]);
 
+        if (is_callable($modifyClientUsing)) {
+            $modifyClientUsing($client);
+        }
+
         $response = $client->post($this->api, ['body' => $data]);
         $content = $response->getBody()->getContents();
-        $obj = json_decode($content, true);
+        $obj = json_decode($content, true, 512, JSON_THROW_ON_ERROR);
 
         $success = isset($obj['status']) && $obj['status'] === 'S';
 

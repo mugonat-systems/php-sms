@@ -22,13 +22,17 @@ class Aptus extends Service
     protected ?string $password;
     protected ?string $senderId;
 
-    public function send(string $phone, string $message): Response
+    public function send(string $phone, string $message, ?callable $modifyClientUsing = null): Response
     {
         $phone = str_replace('+', '', $phone);
         $message = urlencode($message);
 
         try {
             $client = new Client();
+
+            if (is_callable($modifyClientUsing)) {
+                $modifyClientUsing($client);
+            }
             $response = $client->get(
                 "https://www.sms.co.tz/api.php?do=sms&username={$this->username}&password={$this->password}&senderid={$this->senderId}&msg=$message&dest=$phone"
             );

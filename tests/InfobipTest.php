@@ -40,7 +40,7 @@ class InfobipTest extends TestCase
             ->getMock();
 
         $this->infobip->method('send')
-            ->will($this->returnCallback(function ($phone, $message) use ($mockClient) {
+            ->willReturnCallback(function ($phone, $message) use ($mockClient) {
                 $phone = str_replace('+', '', $phone);
                 $response = $mockClient->post('https://api.infobip.com/sms/2/text/advanced', [
                     'messages' => [
@@ -56,7 +56,7 @@ class InfobipTest extends TestCase
                     ],
                 ]);
                 return new Response(true, $response->getBody());
-            }));
+            });
 
 
     }

@@ -23,14 +23,21 @@ class Twilio extends Service
     protected ?string $fromNumber;
 
     /**
-     * @throws GuzzleException
+     * @param string $phone
+     * @param string $message
+     * @param callable|null $modifyClientUsing
+     * @return Response
      */
-    public function send(string $phone, string $message): Response
+    public function send(string $phone, string $message, ?callable $modifyClientUsing = null): Response
     {
         $client = new Client([
             'base_uri' => 'https://api.twilio.com/2010-04-01/Accounts/' . $this->accountSid . '/Messages.json',
             'auth' => [$this->accountSid, $this->authToken],
         ]);
+
+        if (is_callable($modifyClientUsing)) {
+            $modifyClientUsing($client);
+        }
 
         try {
             $response = $client->post('', [
