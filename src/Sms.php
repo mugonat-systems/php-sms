@@ -14,6 +14,7 @@ use Mugonat\Sms\Services\Email;
 use Mugonat\Sms\Services\File;
 use Mugonat\Sms\Services\Infobip;
 use Mugonat\Sms\Services\MessageBird;
+use Mugonat\Sms\Services\Mugonat;
 use Mugonat\Sms\Services\Teleoss;
 use Mugonat\Sms\Services\Twilio;
 use Throwable;
@@ -24,7 +25,7 @@ use function Mugonat\Container\dependency;
  */
 abstract class Sms
 {
-    public static string $default = Bluedot::class;
+    public static string $default = Mugonat::class;
 
     /**
      * Sets the default service for message sending.
@@ -87,19 +88,20 @@ abstract class Sms
     /**
      * Retrieves a service driver instance based on the specified name and configuration.
      *
-     * @template TService
-     * @param string|class-string<TService> $name The name of the service driver to retrieve.
+     * @template TService of Service
+     * @param class-string<TService> $name The name of the service driver to retrieve.
      * @param array|null $config An optional configuration array for the service driver. Defaults to an empty array.
      * @return TService|Service The service driver instance.
      * @throws Throwable|ContainerExceptionInterface
      */
-    public static function driver(string $name, ?array $config = null)
+    public static function driver(string $name, ?array $config = null): Service
     {
         if ($config === null) {
             return dependency($name);
         }
 
         return match ($name) {
+            Mugonat::$alias, Mugonat::class => new Mugonat($config),
             Bluedot::$alias, Bluedot::class => new Bluedot($config),
             Infobip::$alias, Infobip::class => new Infobip($config),
             Aptus::$alias, Aptus::class => new Aptus($config),

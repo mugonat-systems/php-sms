@@ -11,9 +11,9 @@ use Mugonat\Sms\Services\Email;
 use Mugonat\Sms\Services\File;
 use Mugonat\Sms\Services\Infobip;
 use Mugonat\Sms\Services\MessageBird;
+use Mugonat\Sms\Services\Mugonat;
 use Mugonat\Sms\Services\Teleoss;
 use Mugonat\Sms\Services\Twilio;
-use function Mugonat\Container\dependency_exists;
 
 if (!function_exists('sms')) {
     /**
@@ -41,6 +41,8 @@ if (!function_exists('serviceSms')) {
      *
      * @return bool Returns true if the message was sent successfully, otherwise false.
      * @throws GuzzleException
+     * @throws ContainerExceptionInterface
+     * @throws \Throwable
      */
     function serviceSms(string $service, string $phone, string $message): bool
     {
@@ -48,6 +50,28 @@ if (!function_exists('serviceSms')) {
     }
 }
 
+
+if (!function_exists('mugonatSms')) {
+    /**
+     * Sends an SMS message using the Mugonat service.
+     *
+     * @param string $phone The recipient's phone number.
+     * @param string $message The message content to be sent.
+     *
+     * @return bool Returns true if the message was sent successfully, otherwise false.
+     * @throws ContainerExceptionInterface
+     * @throws GuzzleException
+     * @throws \Throwable
+     */
+    function mugonatSms(string $phone, string $message): bool
+    {
+        if (!Container::instance()->exists(Mugonat::class)) {
+            Sms::configure(Mugonat::class, []);
+        }
+
+        return Sms::send($phone, $message, Mugonat::class, false);
+    }
+}
 
 if (!function_exists('bluedotSms')) {
     /**
@@ -57,7 +81,9 @@ if (!function_exists('bluedotSms')) {
      * @param string $message The message content to be sent.
      *
      * @return bool Returns true if the message was sent successfully, otherwise false.
+     * @throws ContainerExceptionInterface
      * @throws GuzzleException
+     * @throws \Throwable
      */
     function bluedotSms(string $phone, string $message): bool
     {
